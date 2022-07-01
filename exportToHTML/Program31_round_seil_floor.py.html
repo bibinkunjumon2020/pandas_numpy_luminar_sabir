@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>Program31_round_seil_floor.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program31_round_seil_floor.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">numpy</span>
+<span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+
+<span class="s1">my_array=numpy.array([[</span><span class="s2">1.2</span><span class="s0">,</span><span class="s2">3.5</span><span class="s0">,</span><span class="s2">5.6</span><span class="s1">]</span><span class="s0">,</span><span class="s1">[</span><span class="s2">5.7</span><span class="s0">,</span><span class="s2">3.4</span><span class="s0">,</span><span class="s2">8.9</span><span class="s1">]</span><span class="s0">,</span><span class="s1">[</span><span class="s2">4.3</span><span class="s0">,</span><span class="s2">6.8</span><span class="s0">,</span><span class="s2">9.7</span><span class="s1">]])</span>
+<span class="s1">print(my_array)</span>
+
+<span class="s3">#Floor Ceil Round</span>
+
+<span class="s3">#Floor - number made as integer -decimal left : No rounding decimal disappeared</span>
+
+<span class="s3">#9.7-&gt;9 , 6.8-&gt;6</span>
+
+<span class="s1">print(np.floor(my_array))</span>
+
+<span class="s3"># Ceil - number made as integer -decimal left : ecimal disappeared  and mapped to next integer Its not rounding</span>
+
+<span class="s3">#9.7-&gt;10 , 6.8-&gt;7 2.1 -&gt; 3</span>
+<span class="s1">print(np.ceil(my_array))</span>
+
+<span class="s3"># Here actual rounding happens : Decimal disappears - Rounding : Above &gt;2.5 - 3(HIGH)  &lt;2.5 - 2(LOW)</span>
+<span class="s3">#2.5 mapped to nearest even number ie: 3.5 -&gt;4 / 4.5-&gt;4</span>
+<span class="s1">print(np.round(my_array))</span></pre>
+</body>
+</html>

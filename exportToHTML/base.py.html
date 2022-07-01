@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>base.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+base.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">pandas._testing </span><span class="s0">as </span><span class="s1">tm</span>
+
+
+<span class="s0">class </span><span class="s1">BaseExtensionTests:</span>
+    <span class="s2"># classmethod and different signature is needed</span>
+    <span class="s2"># to make inheritance compliant with mypy</span>
+    <span class="s1">@classmethod</span>
+    <span class="s0">def </span><span class="s1">assert_equal(cls</span><span class="s0">, </span><span class="s1">left</span><span class="s0">, </span><span class="s1">right</span><span class="s0">, </span><span class="s1">**kwargs):</span>
+        <span class="s0">return </span><span class="s1">tm.assert_equal(left</span><span class="s0">, </span><span class="s1">right</span><span class="s0">, </span><span class="s1">**kwargs)</span>
+
+    <span class="s1">@classmethod</span>
+    <span class="s0">def </span><span class="s1">assert_series_equal(cls</span><span class="s0">, </span><span class="s1">left</span><span class="s0">, </span><span class="s1">right</span><span class="s0">, </span><span class="s1">*args</span><span class="s0">, </span><span class="s1">**kwargs):</span>
+        <span class="s0">return </span><span class="s1">tm.assert_series_equal(left</span><span class="s0">, </span><span class="s1">right</span><span class="s0">, </span><span class="s1">*args</span><span class="s0">, </span><span class="s1">**kwargs)</span>
+
+    <span class="s1">@classmethod</span>
+    <span class="s0">def </span><span class="s1">assert_frame_equal(cls</span><span class="s0">, </span><span class="s1">left</span><span class="s0">, </span><span class="s1">right</span><span class="s0">, </span><span class="s1">*args</span><span class="s0">, </span><span class="s1">**kwargs):</span>
+        <span class="s0">return </span><span class="s1">tm.assert_frame_equal(left</span><span class="s0">, </span><span class="s1">right</span><span class="s0">, </span><span class="s1">*args</span><span class="s0">, </span><span class="s1">**kwargs)</span>
+
+    <span class="s1">@classmethod</span>
+    <span class="s0">def </span><span class="s1">assert_extension_array_equal(cls</span><span class="s0">, </span><span class="s1">left</span><span class="s0">, </span><span class="s1">right</span><span class="s0">, </span><span class="s1">*args</span><span class="s0">, </span><span class="s1">**kwargs):</span>
+        <span class="s0">return </span><span class="s1">tm.assert_extension_array_equal(left</span><span class="s0">, </span><span class="s1">right</span><span class="s0">, </span><span class="s1">*args</span><span class="s0">, </span><span class="s1">**kwargs)</span>
+</pre>
+</body>
+</html>

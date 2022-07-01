@@ -1,0 +1,317 @@
+<html>
+<head>
+<title>_typing.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+_typing.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">__future__ </span><span class="s0">import </span><span class="s1">annotations</span>
+
+<span class="s0">from </span><span class="s1">datetime </span><span class="s0">import </span><span class="s1">(</span>
+    <span class="s1">datetime</span><span class="s0">,</span>
+    <span class="s1">timedelta</span><span class="s0">,</span>
+    <span class="s1">tzinfo</span><span class="s0">,</span>
+<span class="s1">)</span>
+<span class="s0">from </span><span class="s1">os </span><span class="s0">import </span><span class="s1">PathLike</span>
+<span class="s0">from </span><span class="s1">typing </span><span class="s0">import </span><span class="s1">(</span>
+    <span class="s1">TYPE_CHECKING</span><span class="s0">,</span>
+    <span class="s1">Any</span><span class="s0">,</span>
+    <span class="s1">Callable</span><span class="s0">,</span>
+    <span class="s1">Collection</span><span class="s0">,</span>
+    <span class="s1">Dict</span><span class="s0">,</span>
+    <span class="s1">Hashable</span><span class="s0">,</span>
+    <span class="s1">Iterator</span><span class="s0">,</span>
+    <span class="s1">List</span><span class="s0">,</span>
+    <span class="s1">Literal</span><span class="s0">,</span>
+    <span class="s1">Mapping</span><span class="s0">,</span>
+    <span class="s1">Optional</span><span class="s0">,</span>
+    <span class="s1">Protocol</span><span class="s0">,</span>
+    <span class="s1">Sequence</span><span class="s0">,</span>
+    <span class="s1">Tuple</span><span class="s0">,</span>
+    <span class="s1">Type </span><span class="s0">as </span><span class="s1">type_t</span><span class="s0">,</span>
+    <span class="s1">TypeVar</span><span class="s0">,</span>
+    <span class="s1">Union</span><span class="s0">,</span>
+<span class="s1">)</span>
+
+<span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+
+<span class="s2"># To prevent import cycles place any internal imports in the branch below</span>
+<span class="s2"># and use a string literal forward reference to it in subsequent types</span>
+<span class="s2"># https://mypy.readthedocs.io/en/latest/common_issues.html#import-cycles</span>
+<span class="s0">if </span><span class="s1">TYPE_CHECKING:</span>
+    <span class="s0">import </span><span class="s1">numpy.typing </span><span class="s0">as </span><span class="s1">npt</span>
+
+    <span class="s0">from </span><span class="s1">pandas._libs </span><span class="s0">import </span><span class="s1">(</span>
+        <span class="s1">Period</span><span class="s0">,</span>
+        <span class="s1">Timedelta</span><span class="s0">,</span>
+        <span class="s1">Timestamp</span><span class="s0">,</span>
+    <span class="s1">)</span>
+
+    <span class="s0">from </span><span class="s1">pandas.core.dtypes.dtypes </span><span class="s0">import </span><span class="s1">ExtensionDtype</span>
+
+    <span class="s0">from </span><span class="s1">pandas </span><span class="s0">import </span><span class="s1">Interval</span>
+    <span class="s0">from </span><span class="s1">pandas.core.arrays.base </span><span class="s0">import </span><span class="s1">ExtensionArray</span>
+    <span class="s0">from </span><span class="s1">pandas.core.frame </span><span class="s0">import </span><span class="s1">DataFrame</span>
+    <span class="s0">from </span><span class="s1">pandas.core.generic </span><span class="s0">import </span><span class="s1">NDFrame</span>
+    <span class="s0">from </span><span class="s1">pandas.core.groupby.generic </span><span class="s0">import </span><span class="s1">(</span>
+        <span class="s1">DataFrameGroupBy</span><span class="s0">,</span>
+        <span class="s1">GroupBy</span><span class="s0">,</span>
+        <span class="s1">SeriesGroupBy</span><span class="s0">,</span>
+    <span class="s1">)</span>
+    <span class="s0">from </span><span class="s1">pandas.core.indexes.base </span><span class="s0">import </span><span class="s1">Index</span>
+    <span class="s0">from </span><span class="s1">pandas.core.internals </span><span class="s0">import </span><span class="s1">(</span>
+        <span class="s1">ArrayManager</span><span class="s0">,</span>
+        <span class="s1">BlockManager</span><span class="s0">,</span>
+        <span class="s1">SingleArrayManager</span><span class="s0">,</span>
+        <span class="s1">SingleBlockManager</span><span class="s0">,</span>
+    <span class="s1">)</span>
+    <span class="s0">from </span><span class="s1">pandas.core.resample </span><span class="s0">import </span><span class="s1">Resampler</span>
+    <span class="s0">from </span><span class="s1">pandas.core.series </span><span class="s0">import </span><span class="s1">Series</span>
+    <span class="s0">from </span><span class="s1">pandas.core.window.rolling </span><span class="s0">import </span><span class="s1">BaseWindow</span>
+
+    <span class="s0">from </span><span class="s1">pandas.io.formats.format </span><span class="s0">import </span><span class="s1">EngFormatter</span>
+    <span class="s0">from </span><span class="s1">pandas.tseries.offsets </span><span class="s0">import </span><span class="s1">DateOffset</span>
+
+    <span class="s2"># numpy compatible types</span>
+    <span class="s1">NumpyValueArrayLike = Union[npt._ScalarLike_co</span><span class="s0">, </span><span class="s1">npt.ArrayLike]</span>
+    <span class="s1">NumpySorter = Optional[npt._ArrayLikeInt_co]</span>
+
+<span class="s0">else</span><span class="s1">:</span>
+    <span class="s1">npt: Any = </span><span class="s0">None</span>
+
+
+<span class="s2"># array-like</span>
+
+<span class="s1">ArrayLike = Union[</span><span class="s3">&quot;ExtensionArray&quot;</span><span class="s0">, </span><span class="s1">np.ndarray]</span>
+<span class="s1">AnyArrayLike = Union[ArrayLike</span><span class="s0">, </span><span class="s3">&quot;Index&quot;</span><span class="s0">, </span><span class="s3">&quot;Series&quot;</span><span class="s1">]</span>
+
+<span class="s2"># scalars</span>
+
+<span class="s1">PythonScalar = Union[str</span><span class="s0">, </span><span class="s1">int</span><span class="s0">, </span><span class="s1">float</span><span class="s0">, </span><span class="s1">bool]</span>
+<span class="s1">DatetimeLikeScalar = Union[</span><span class="s3">&quot;Period&quot;</span><span class="s0">, </span><span class="s3">&quot;Timestamp&quot;</span><span class="s0">, </span><span class="s3">&quot;Timedelta&quot;</span><span class="s1">]</span>
+<span class="s1">PandasScalar = Union[</span><span class="s3">&quot;Period&quot;</span><span class="s0">, </span><span class="s3">&quot;Timestamp&quot;</span><span class="s0">, </span><span class="s3">&quot;Timedelta&quot;</span><span class="s0">, </span><span class="s3">&quot;Interval&quot;</span><span class="s1">]</span>
+<span class="s1">Scalar = Union[PythonScalar</span><span class="s0">, </span><span class="s1">PandasScalar]</span>
+<span class="s1">IntStrT = TypeVar(</span><span class="s3">&quot;IntStrT&quot;</span><span class="s0">, </span><span class="s1">int</span><span class="s0">, </span><span class="s1">str)</span>
+
+
+<span class="s2"># timestamp and timedelta convertible types</span>
+
+<span class="s1">TimestampConvertibleTypes = Union[</span>
+    <span class="s3">&quot;Timestamp&quot;</span><span class="s0">, </span><span class="s1">datetime</span><span class="s0">, </span><span class="s1">np.datetime64</span><span class="s0">, </span><span class="s1">int</span><span class="s0">, </span><span class="s1">np.int64</span><span class="s0">, </span><span class="s1">float</span><span class="s0">, </span><span class="s1">str</span>
+<span class="s1">]</span>
+<span class="s1">TimedeltaConvertibleTypes = Union[</span>
+    <span class="s3">&quot;Timedelta&quot;</span><span class="s0">, </span><span class="s1">timedelta</span><span class="s0">, </span><span class="s1">np.timedelta64</span><span class="s0">, </span><span class="s1">int</span><span class="s0">, </span><span class="s1">np.int64</span><span class="s0">, </span><span class="s1">float</span><span class="s0">, </span><span class="s1">str</span>
+<span class="s1">]</span>
+<span class="s1">Timezone = Union[str</span><span class="s0">, </span><span class="s1">tzinfo]</span>
+
+<span class="s2"># NDFrameT is stricter and ensures that the same subclass of NDFrame always is</span>
+<span class="s2"># used. E.g. `def func(a: NDFrameT) -&gt; NDFrameT: ...` means that if a</span>
+<span class="s2"># Series is passed into a function, a Series is always returned and if a DataFrame is</span>
+<span class="s2"># passed in, a DataFrame is always returned.</span>
+<span class="s1">NDFrameT = TypeVar(</span><span class="s3">&quot;NDFrameT&quot;</span><span class="s0">, </span><span class="s1">bound=</span><span class="s3">&quot;NDFrame&quot;</span><span class="s1">)</span>
+
+<span class="s1">Axis = Union[str</span><span class="s0">, </span><span class="s1">int]</span>
+<span class="s1">IndexLabel = Union[Hashable</span><span class="s0">, </span><span class="s1">Sequence[Hashable]]</span>
+<span class="s1">Level = Union[Hashable</span><span class="s0">, </span><span class="s1">int]</span>
+<span class="s1">Shape = Tuple[int</span><span class="s0">, </span><span class="s1">...]</span>
+<span class="s1">Suffixes = Tuple[Optional[str]</span><span class="s0">, </span><span class="s1">Optional[str]]</span>
+<span class="s1">Ordered = Optional[bool]</span>
+<span class="s1">JSONSerializable = Optional[Union[PythonScalar</span><span class="s0">, </span><span class="s1">List</span><span class="s0">, </span><span class="s1">Dict]]</span>
+<span class="s1">Frequency = Union[str</span><span class="s0">, </span><span class="s3">&quot;DateOffset&quot;</span><span class="s1">]</span>
+<span class="s1">Axes = Collection[Any]</span>
+
+<span class="s1">RandomState = Union[</span>
+    <span class="s1">int</span><span class="s0">,</span>
+    <span class="s1">ArrayLike</span><span class="s0">,</span>
+    <span class="s1">np.random.Generator</span><span class="s0">,</span>
+    <span class="s1">np.random.BitGenerator</span><span class="s0">,</span>
+    <span class="s1">np.random.RandomState</span><span class="s0">,</span>
+<span class="s1">]</span>
+
+<span class="s2"># dtypes</span>
+<span class="s1">NpDtype = Union[str</span><span class="s0">, </span><span class="s1">np.dtype</span><span class="s0">, </span><span class="s1">type_t[Union[str</span><span class="s0">, </span><span class="s1">float</span><span class="s0">, </span><span class="s1">int</span><span class="s0">, </span><span class="s1">complex</span><span class="s0">, </span><span class="s1">bool</span><span class="s0">, </span><span class="s1">object]]]</span>
+<span class="s1">Dtype = Union[</span><span class="s3">&quot;ExtensionDtype&quot;</span><span class="s0">, </span><span class="s1">NpDtype]</span>
+<span class="s1">AstypeArg = Union[</span><span class="s3">&quot;ExtensionDtype&quot;</span><span class="s0">, </span><span class="s3">&quot;npt.DTypeLike&quot;</span><span class="s1">]</span>
+<span class="s2"># DtypeArg specifies all allowable dtypes in a functions its dtype argument</span>
+<span class="s1">DtypeArg = Union[Dtype</span><span class="s0">, </span><span class="s1">Dict[Hashable</span><span class="s0">, </span><span class="s1">Dtype]]</span>
+<span class="s1">DtypeObj = Union[np.dtype</span><span class="s0">, </span><span class="s3">&quot;ExtensionDtype&quot;</span><span class="s1">]</span>
+
+<span class="s2"># For functions like rename that convert one label to another</span>
+<span class="s1">Renamer = Union[Mapping[Hashable</span><span class="s0">, </span><span class="s1">Any]</span><span class="s0">, </span><span class="s1">Callable[[Hashable]</span><span class="s0">, </span><span class="s1">Hashable]]</span>
+
+<span class="s2"># to maintain type information across generic functions and parametrization</span>
+<span class="s1">T = TypeVar(</span><span class="s3">&quot;T&quot;</span><span class="s1">)</span>
+
+<span class="s2"># used in decorators to preserve the signature of the function it decorates</span>
+<span class="s2"># see https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators</span>
+<span class="s1">FuncType = Callable[...</span><span class="s0">, </span><span class="s1">Any]</span>
+<span class="s1">F = TypeVar(</span><span class="s3">&quot;F&quot;</span><span class="s0">, </span><span class="s1">bound=FuncType)</span>
+
+<span class="s2"># types of vectorized key functions for DataFrame::sort_values and</span>
+<span class="s2"># DataFrame::sort_index, among others</span>
+<span class="s1">ValueKeyFunc = Optional[Callable[[</span><span class="s3">&quot;Series&quot;</span><span class="s1">]</span><span class="s0">, </span><span class="s1">Union[</span><span class="s3">&quot;Series&quot;</span><span class="s0">, </span><span class="s1">AnyArrayLike]]]</span>
+<span class="s1">IndexKeyFunc = Optional[Callable[[</span><span class="s3">&quot;Index&quot;</span><span class="s1">]</span><span class="s0">, </span><span class="s1">Union[</span><span class="s3">&quot;Index&quot;</span><span class="s0">, </span><span class="s1">AnyArrayLike]]]</span>
+
+<span class="s2"># types of `func` kwarg for DataFrame.aggregate and Series.aggregate</span>
+<span class="s1">AggFuncTypeBase = Union[Callable</span><span class="s0">, </span><span class="s1">str]</span>
+<span class="s1">AggFuncTypeDict = Dict[Hashable</span><span class="s0">, </span><span class="s1">Union[AggFuncTypeBase</span><span class="s0">, </span><span class="s1">List[AggFuncTypeBase]]]</span>
+<span class="s1">AggFuncType = Union[</span>
+    <span class="s1">AggFuncTypeBase</span><span class="s0">,</span>
+    <span class="s1">List[AggFuncTypeBase]</span><span class="s0">,</span>
+    <span class="s1">AggFuncTypeDict</span><span class="s0">,</span>
+<span class="s1">]</span>
+<span class="s1">AggObjType = Union[</span>
+    <span class="s3">&quot;Series&quot;</span><span class="s0">,</span>
+    <span class="s3">&quot;DataFrame&quot;</span><span class="s0">,</span>
+    <span class="s3">&quot;GroupBy&quot;</span><span class="s0">,</span>
+    <span class="s3">&quot;SeriesGroupBy&quot;</span><span class="s0">,</span>
+    <span class="s3">&quot;DataFrameGroupBy&quot;</span><span class="s0">,</span>
+    <span class="s3">&quot;BaseWindow&quot;</span><span class="s0">,</span>
+    <span class="s3">&quot;Resampler&quot;</span><span class="s0">,</span>
+<span class="s1">]</span>
+
+<span class="s1">PythonFuncType = Callable[[Any]</span><span class="s0">, </span><span class="s1">Any]</span>
+
+<span class="s2"># filenames and file-like-objects</span>
+<span class="s1">AnyStr_cov = TypeVar(</span><span class="s3">&quot;AnyStr_cov&quot;</span><span class="s0">, </span><span class="s1">str</span><span class="s0">, </span><span class="s1">bytes</span><span class="s0">, </span><span class="s1">covariant=</span><span class="s0">True</span><span class="s1">)</span>
+<span class="s1">AnyStr_con = TypeVar(</span><span class="s3">&quot;AnyStr_con&quot;</span><span class="s0">, </span><span class="s1">str</span><span class="s0">, </span><span class="s1">bytes</span><span class="s0">, </span><span class="s1">contravariant=</span><span class="s0">True</span><span class="s1">)</span>
+
+
+<span class="s0">class </span><span class="s1">BaseBuffer(Protocol):</span>
+    <span class="s1">@property</span>
+    <span class="s0">def </span><span class="s1">mode(self) -&gt; str:</span>
+        <span class="s2"># for _get_filepath_or_buffer</span>
+        <span class="s1">...</span>
+
+    <span class="s0">def </span><span class="s1">fileno(self) -&gt; int:</span>
+        <span class="s2"># for _MMapWrapper</span>
+        <span class="s1">...</span>
+
+    <span class="s0">def </span><span class="s1">seek(self</span><span class="s0">, </span><span class="s1">__offset: int</span><span class="s0">, </span><span class="s1">__whence: int = ...) -&gt; int:</span>
+        <span class="s2"># with one argument: gzip.GzipFile, bz2.BZ2File</span>
+        <span class="s2"># with two arguments: zip.ZipFile, read_sas</span>
+        <span class="s1">...</span>
+
+    <span class="s0">def </span><span class="s1">seekable(self) -&gt; bool:</span>
+        <span class="s2"># for bz2.BZ2File</span>
+        <span class="s1">...</span>
+
+    <span class="s0">def </span><span class="s1">tell(self) -&gt; int:</span>
+        <span class="s2"># for zip.ZipFile, read_stata, to_stata</span>
+        <span class="s1">...</span>
+
+
+<span class="s0">class </span><span class="s1">ReadBuffer(BaseBuffer</span><span class="s0">, </span><span class="s1">Protocol[AnyStr_cov]):</span>
+    <span class="s0">def </span><span class="s1">read(self</span><span class="s0">, </span><span class="s1">__n: int | </span><span class="s0">None </span><span class="s1">= ...) -&gt; AnyStr_cov:</span>
+        <span class="s2"># for BytesIOWrapper, gzip.GzipFile, bz2.BZ2File</span>
+        <span class="s1">...</span>
+
+
+<span class="s0">class </span><span class="s1">WriteBuffer(BaseBuffer</span><span class="s0">, </span><span class="s1">Protocol[AnyStr_con]):</span>
+    <span class="s0">def </span><span class="s1">write(self</span><span class="s0">, </span><span class="s1">__b: AnyStr_con) -&gt; Any:</span>
+        <span class="s2"># for gzip.GzipFile, bz2.BZ2File</span>
+        <span class="s1">...</span>
+
+    <span class="s0">def </span><span class="s1">flush(self) -&gt; Any:</span>
+        <span class="s2"># for gzip.GzipFile, bz2.BZ2File</span>
+        <span class="s1">...</span>
+
+
+<span class="s0">class </span><span class="s1">ReadPickleBuffer(ReadBuffer[bytes]</span><span class="s0">, </span><span class="s1">Protocol):</span>
+    <span class="s0">def </span><span class="s1">readline(self) -&gt; AnyStr_cov:</span>
+        <span class="s1">...</span>
+
+
+<span class="s0">class </span><span class="s1">WriteExcelBuffer(WriteBuffer[bytes]</span><span class="s0">, </span><span class="s1">Protocol):</span>
+    <span class="s0">def </span><span class="s1">truncate(self</span><span class="s0">, </span><span class="s1">size: int | </span><span class="s0">None </span><span class="s1">= ...) -&gt; int:</span>
+        <span class="s1">...</span>
+
+
+<span class="s0">class </span><span class="s1">ReadCsvBuffer(ReadBuffer[AnyStr_cov]</span><span class="s0">, </span><span class="s1">Protocol):</span>
+    <span class="s0">def </span><span class="s1">__iter__(self) -&gt; Iterator[AnyStr_cov]:</span>
+        <span class="s2"># for engine=python</span>
+        <span class="s1">...</span>
+
+    <span class="s0">def </span><span class="s1">readline(self) -&gt; AnyStr_cov:</span>
+        <span class="s2"># for engine=python</span>
+        <span class="s1">...</span>
+
+    <span class="s1">@property</span>
+    <span class="s0">def </span><span class="s1">closed(self) -&gt; bool:</span>
+        <span class="s2"># for enine=pyarrow</span>
+        <span class="s1">...</span>
+
+
+<span class="s1">FilePath = Union[str</span><span class="s0">, </span><span class="s3">&quot;PathLike[str]&quot;</span><span class="s1">]</span>
+
+<span class="s2"># for arbitrary kwargs passed during reading/writing files</span>
+<span class="s1">StorageOptions = Optional[Dict[str</span><span class="s0">, </span><span class="s1">Any]]</span>
+
+
+<span class="s2"># compression keywords and compression</span>
+<span class="s1">CompressionDict = Dict[str</span><span class="s0">, </span><span class="s1">Any]</span>
+<span class="s1">CompressionOptions = Optional[</span>
+    <span class="s1">Union[Literal[</span><span class="s3">&quot;infer&quot;</span><span class="s0">, </span><span class="s3">&quot;gzip&quot;</span><span class="s0">, </span><span class="s3">&quot;bz2&quot;</span><span class="s0">, </span><span class="s3">&quot;zip&quot;</span><span class="s0">, </span><span class="s3">&quot;xz&quot;</span><span class="s0">, </span><span class="s3">&quot;zstd&quot;</span><span class="s1">]</span><span class="s0">, </span><span class="s1">CompressionDict]</span>
+<span class="s1">]</span>
+<span class="s1">XMLParsers = Literal[</span><span class="s3">&quot;lxml&quot;</span><span class="s0">, </span><span class="s3">&quot;etree&quot;</span><span class="s1">]</span>
+
+
+<span class="s2"># types in DataFrameFormatter</span>
+<span class="s1">FormattersType = Union[</span>
+    <span class="s1">List[Callable]</span><span class="s0">, </span><span class="s1">Tuple[Callable</span><span class="s0">, </span><span class="s1">...]</span><span class="s0">, </span><span class="s1">Mapping[Union[str</span><span class="s0">, </span><span class="s1">int]</span><span class="s0">, </span><span class="s1">Callable]</span>
+<span class="s1">]</span>
+<span class="s1">ColspaceType = Mapping[Hashable</span><span class="s0">, </span><span class="s1">Union[str</span><span class="s0">, </span><span class="s1">int]]</span>
+<span class="s1">FloatFormatType = Union[str</span><span class="s0">, </span><span class="s1">Callable</span><span class="s0">, </span><span class="s3">&quot;EngFormatter&quot;</span><span class="s1">]</span>
+<span class="s1">ColspaceArgType = Union[</span>
+    <span class="s1">str</span><span class="s0">, </span><span class="s1">int</span><span class="s0">, </span><span class="s1">Sequence[Union[str</span><span class="s0">, </span><span class="s1">int]]</span><span class="s0">, </span><span class="s1">Mapping[Hashable</span><span class="s0">, </span><span class="s1">Union[str</span><span class="s0">, </span><span class="s1">int]]</span>
+<span class="s1">]</span>
+
+<span class="s2"># Arguments for fillna()</span>
+<span class="s1">FillnaOptions = Literal[</span><span class="s3">&quot;backfill&quot;</span><span class="s0">, </span><span class="s3">&quot;bfill&quot;</span><span class="s0">, </span><span class="s3">&quot;ffill&quot;</span><span class="s0">, </span><span class="s3">&quot;pad&quot;</span><span class="s1">]</span>
+
+<span class="s2"># internals</span>
+<span class="s1">Manager = Union[</span>
+    <span class="s3">&quot;ArrayManager&quot;</span><span class="s0">, </span><span class="s3">&quot;SingleArrayManager&quot;</span><span class="s0">, </span><span class="s3">&quot;BlockManager&quot;</span><span class="s0">, </span><span class="s3">&quot;SingleBlockManager&quot;</span>
+<span class="s1">]</span>
+<span class="s1">SingleManager = Union[</span><span class="s3">&quot;SingleArrayManager&quot;</span><span class="s0">, </span><span class="s3">&quot;SingleBlockManager&quot;</span><span class="s1">]</span>
+<span class="s1">Manager2D = Union[</span><span class="s3">&quot;ArrayManager&quot;</span><span class="s0">, </span><span class="s3">&quot;BlockManager&quot;</span><span class="s1">]</span>
+
+<span class="s2"># indexing</span>
+<span class="s2"># PositionalIndexer -&gt; valid 1D positional indexer, e.g. can pass</span>
+<span class="s2"># to ndarray.__getitem__</span>
+<span class="s2"># ScalarIndexer is for a single value as the index</span>
+<span class="s2"># SequenceIndexer is for list like or slices (but not tuples)</span>
+<span class="s2"># PositionalIndexerTuple is extends the PositionalIndexer for 2D arrays</span>
+<span class="s2"># These are used in various __getitem__ overloads</span>
+<span class="s2"># TODO(typing#684): add Ellipsis, see</span>
+<span class="s2"># https://github.com/python/typing/issues/684#issuecomment-548203158</span>
+<span class="s2"># https://bugs.python.org/issue41810</span>
+<span class="s2"># Using List[int] here rather than Sequence[int] to disallow tuples.</span>
+<span class="s1">ScalarIndexer = Union[int</span><span class="s0">, </span><span class="s1">np.integer]</span>
+<span class="s1">SequenceIndexer = Union[slice</span><span class="s0">, </span><span class="s1">List[int]</span><span class="s0">, </span><span class="s1">np.ndarray]</span>
+<span class="s1">PositionalIndexer = Union[ScalarIndexer</span><span class="s0">, </span><span class="s1">SequenceIndexer]</span>
+<span class="s1">PositionalIndexerTuple = Tuple[PositionalIndexer</span><span class="s0">, </span><span class="s1">PositionalIndexer]</span>
+<span class="s1">PositionalIndexer2D = Union[PositionalIndexer</span><span class="s0">, </span><span class="s1">PositionalIndexerTuple]</span>
+<span class="s0">if </span><span class="s1">TYPE_CHECKING:</span>
+    <span class="s1">TakeIndexer = Union[Sequence[int]</span><span class="s0">, </span><span class="s1">Sequence[np.integer]</span><span class="s0">, </span><span class="s1">npt.NDArray[np.integer]]</span>
+<span class="s0">else</span><span class="s1">:</span>
+    <span class="s1">TakeIndexer = Any</span>
+
+<span class="s2"># Windowing rank methods</span>
+<span class="s1">WindowingRankType = Literal[</span><span class="s3">&quot;average&quot;</span><span class="s0">, </span><span class="s3">&quot;min&quot;</span><span class="s0">, </span><span class="s3">&quot;max&quot;</span><span class="s1">]</span>
+
+<span class="s2"># read_csv engines</span>
+<span class="s1">CSVEngine = Literal[</span><span class="s3">&quot;c&quot;</span><span class="s0">, </span><span class="s3">&quot;python&quot;</span><span class="s0">, </span><span class="s3">&quot;pyarrow&quot;</span><span class="s0">, </span><span class="s3">&quot;python-fwf&quot;</span><span class="s1">]</span>
+</pre>
+</body>
+</html>

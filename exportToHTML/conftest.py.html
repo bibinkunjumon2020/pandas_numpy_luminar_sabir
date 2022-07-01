@@ -1,0 +1,254 @@
+<html>
+<head>
+<title>conftest.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #6897bb;}
+.s4 { color: #808080;}
+.s5 { color: #629755; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+conftest.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+<span class="s0">import </span><span class="s1">pytest</span>
+
+<span class="s0">import </span><span class="s1">pandas </span><span class="s0">as </span><span class="s1">pd</span>
+<span class="s0">from </span><span class="s1">pandas </span><span class="s0">import </span><span class="s1">RangeIndex</span>
+<span class="s0">import </span><span class="s1">pandas._testing </span><span class="s0">as </span><span class="s1">tm</span>
+<span class="s0">from </span><span class="s1">pandas.core.api </span><span class="s0">import </span><span class="s1">(</span>
+    <span class="s1">Float64Index</span><span class="s0">,</span>
+    <span class="s1">Int64Index</span><span class="s0">,</span>
+    <span class="s1">UInt64Index</span><span class="s0">,</span>
+<span class="s1">)</span>
+<span class="s0">from </span><span class="s1">pandas.core.computation </span><span class="s0">import </span><span class="s1">expressions </span><span class="s0">as </span><span class="s1">expr</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">autouse=</span><span class="s0">True, </span><span class="s1">scope=</span><span class="s2">&quot;module&quot;</span><span class="s0">, </span><span class="s1">params=[</span><span class="s3">0</span><span class="s0">, </span><span class="s3">1000000</span><span class="s1">]</span><span class="s0">, </span><span class="s1">ids=[</span><span class="s2">&quot;numexpr&quot;</span><span class="s0">, </span><span class="s2">&quot;python&quot;</span><span class="s1">]</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">switch_numexpr_min_elements(request):</span>
+    <span class="s1">_MIN_ELEMENTS = expr._MIN_ELEMENTS</span>
+    <span class="s1">expr._MIN_ELEMENTS = request.param</span>
+    <span class="s0">yield </span><span class="s1">request.param</span>
+    <span class="s1">expr._MIN_ELEMENTS = _MIN_ELEMENTS</span>
+
+
+<span class="s4"># ------------------------------------------------------------------</span>
+
+<span class="s4"># doctest with +SKIP for one fixture fails during setup with</span>
+<span class="s4"># 'DoctestItem' object has no attribute 'callspec'</span>
+<span class="s4"># due to switch_numexpr_min_elements fixture</span>
+<span class="s1">@pytest.fixture(params=[</span><span class="s3">1</span><span class="s0">, </span><span class="s1">np.array(</span><span class="s3">1</span><span class="s0">, </span><span class="s1">dtype=np.int64)])</span>
+<span class="s0">def </span><span class="s1">one(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several variants of integer value 1. The zero-dim integer array 
+    behaves like an integer. 
+ 
+    This fixture can be used to check that datetimelike indexes handle 
+    addition and subtraction of integers and zero-dimensional arrays 
+    of integers. 
+ 
+    Examples 
+    -------- 
+    dti = pd.date_range('2016-01-01', periods=2, freq='H') 
+    dti 
+    DatetimeIndex(['2016-01-01 00:00:00', '2016-01-01 01:00:00'], 
+    dtype='datetime64[ns]', freq='H') 
+    dti + one 
+    DatetimeIndex(['2016-01-01 01:00:00', '2016-01-01 02:00:00'], 
+    dtype='datetime64[ns]', freq='H') 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s1">zeros = [</span>
+    <span class="s1">box_cls([</span><span class="s3">0</span><span class="s1">] * </span><span class="s3">5</span><span class="s0">, </span><span class="s1">dtype=dtype)</span>
+    <span class="s0">for </span><span class="s1">box_cls </span><span class="s0">in </span><span class="s1">[pd.Index</span><span class="s0">, </span><span class="s1">np.array</span><span class="s0">, </span><span class="s1">pd.array]</span>
+    <span class="s0">for </span><span class="s1">dtype </span><span class="s0">in </span><span class="s1">[np.int64</span><span class="s0">, </span><span class="s1">np.uint64</span><span class="s0">, </span><span class="s1">np.float64]</span>
+<span class="s1">]</span>
+<span class="s1">zeros.extend(</span>
+    <span class="s1">[box_cls([-</span><span class="s3">0.0</span><span class="s1">] * </span><span class="s3">5</span><span class="s0">, </span><span class="s1">dtype=np.float64) </span><span class="s0">for </span><span class="s1">box_cls </span><span class="s0">in </span><span class="s1">[pd.Index</span><span class="s0">, </span><span class="s1">np.array]]</span>
+<span class="s1">)</span>
+<span class="s1">zeros.extend([np.array(</span><span class="s3">0</span><span class="s0">, </span><span class="s1">dtype=dtype) </span><span class="s0">for </span><span class="s1">dtype </span><span class="s0">in </span><span class="s1">[np.int64</span><span class="s0">, </span><span class="s1">np.uint64</span><span class="s0">, </span><span class="s1">np.float64]])</span>
+<span class="s1">zeros.extend([np.array(-</span><span class="s3">0.0</span><span class="s0">, </span><span class="s1">dtype=np.float64)])</span>
+<span class="s1">zeros.extend([</span><span class="s3">0</span><span class="s0">, </span><span class="s3">0.0</span><span class="s0">, </span><span class="s1">-</span><span class="s3">0.0</span><span class="s1">])</span>
+
+
+<span class="s4"># doctest with +SKIP for zero fixture fails during setup with</span>
+<span class="s4"># 'DoctestItem' object has no attribute 'callspec'</span>
+<span class="s4"># due to switch_numexpr_min_elements fixture</span>
+<span class="s1">@pytest.fixture(params=zeros)</span>
+<span class="s0">def </span><span class="s1">zero(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several types of scalar zeros and length 5 vectors of zeros. 
+ 
+    This fixture can be used to check that numeric-dtype indexes handle 
+    division by any zero numeric-dtype. 
+ 
+    Uses vector of length 5 for broadcasting with `numeric_idx` fixture, 
+    which creates numeric-dtype vectors also of length 5. 
+ 
+    Examples 
+    -------- 
+    arr = RangeIndex(5) 
+    arr / zeros 
+    Float64Index([nan, inf, inf, inf, inf], dtype='float64') 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s4"># ------------------------------------------------------------------</span>
+<span class="s4"># Vector Fixtures</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=[</span>
+        <span class="s1">Float64Index(np.arange(</span><span class="s3">5</span><span class="s0">, </span><span class="s1">dtype=</span><span class="s2">&quot;float64&quot;</span><span class="s1">))</span><span class="s0">,</span>
+        <span class="s1">Int64Index(np.arange(</span><span class="s3">5</span><span class="s0">, </span><span class="s1">dtype=</span><span class="s2">&quot;int64&quot;</span><span class="s1">))</span><span class="s0">,</span>
+        <span class="s1">UInt64Index(np.arange(</span><span class="s3">5</span><span class="s0">, </span><span class="s1">dtype=</span><span class="s2">&quot;uint64&quot;</span><span class="s1">))</span><span class="s0">,</span>
+        <span class="s1">RangeIndex(</span><span class="s3">5</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">]</span><span class="s0">,</span>
+    <span class="s1">ids=</span><span class="s0">lambda </span><span class="s1">x: type(x).__name__</span><span class="s0">,</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">numeric_idx(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several types of numeric-dtypes Index objects 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s4"># ------------------------------------------------------------------</span>
+<span class="s4"># Scalar Fixtures</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=[</span>
+        <span class="s1">pd.Timedelta(</span><span class="s2">&quot;10m7s&quot;</span><span class="s1">).to_pytimedelta()</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(</span><span class="s2">&quot;10m7s&quot;</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(</span><span class="s2">&quot;10m7s&quot;</span><span class="s1">).to_timedelta64()</span><span class="s0">,</span>
+    <span class="s1">]</span><span class="s0">,</span>
+    <span class="s1">ids=</span><span class="s0">lambda </span><span class="s1">x: type(x).__name__</span><span class="s0">,</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">scalar_td(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several variants of Timedelta scalars representing 10 minutes and 7 seconds. 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=[</span>
+        <span class="s1">pd.offsets.Day(</span><span class="s3">3</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">pd.offsets.Hour(</span><span class="s3">72</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(days=</span><span class="s3">3</span><span class="s1">).to_pytimedelta()</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(</span><span class="s2">&quot;72:00:00&quot;</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">np.timedelta64(</span><span class="s3">3</span><span class="s0">, </span><span class="s2">&quot;D&quot;</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">np.timedelta64(</span><span class="s3">72</span><span class="s0">, </span><span class="s2">&quot;h&quot;</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">]</span><span class="s0">,</span>
+    <span class="s1">ids=</span><span class="s0">lambda </span><span class="s1">x: type(x).__name__</span><span class="s0">,</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">three_days(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several timedelta-like and DateOffset objects that each represent 
+    a 3-day timedelta 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=[</span>
+        <span class="s1">pd.offsets.Hour(</span><span class="s3">2</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">pd.offsets.Minute(</span><span class="s3">120</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(hours=</span><span class="s3">2</span><span class="s1">).to_pytimedelta()</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(seconds=</span><span class="s3">2 </span><span class="s1">* </span><span class="s3">3600</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">np.timedelta64(</span><span class="s3">2</span><span class="s0">, </span><span class="s2">&quot;h&quot;</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">np.timedelta64(</span><span class="s3">120</span><span class="s0">, </span><span class="s2">&quot;m&quot;</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">]</span><span class="s0">,</span>
+    <span class="s1">ids=</span><span class="s0">lambda </span><span class="s1">x: type(x).__name__</span><span class="s0">,</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">two_hours(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several timedelta-like and DateOffset objects that each represent 
+    a 2-hour timedelta 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s1">_common_mismatch = [</span>
+    <span class="s1">pd.offsets.YearBegin(</span><span class="s3">2</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">pd.offsets.MonthBegin(</span><span class="s3">1</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">pd.offsets.Minute()</span><span class="s0">,</span>
+<span class="s1">]</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=[</span>
+        <span class="s1">pd.Timedelta(minutes=</span><span class="s3">30</span><span class="s1">).to_pytimedelta()</span><span class="s0">,</span>
+        <span class="s1">np.timedelta64(</span><span class="s3">30</span><span class="s0">, </span><span class="s2">&quot;s&quot;</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(seconds=</span><span class="s3">30</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">]</span>
+    <span class="s1">+ _common_mismatch</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">not_hourly(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several timedelta-like and DateOffset instances that are _not_ 
+    compatible with Hourly frequencies. 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=[</span>
+        <span class="s1">np.timedelta64(</span><span class="s3">4</span><span class="s0">, </span><span class="s2">&quot;h&quot;</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(hours=</span><span class="s3">23</span><span class="s1">).to_pytimedelta()</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(</span><span class="s2">&quot;23:00:00&quot;</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">]</span>
+    <span class="s1">+ _common_mismatch</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">not_daily(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several timedelta-like and DateOffset instances that are _not_ 
+    compatible with Daily frequencies. 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=[</span>
+        <span class="s1">np.timedelta64(</span><span class="s3">365</span><span class="s0">, </span><span class="s2">&quot;D&quot;</span><span class="s1">)</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(days=</span><span class="s3">365</span><span class="s1">).to_pytimedelta()</span><span class="s0">,</span>
+        <span class="s1">pd.Timedelta(days=</span><span class="s3">365</span><span class="s1">)</span><span class="s0">,</span>
+    <span class="s1">]</span>
+    <span class="s1">+ _common_mismatch</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">mismatched_freq(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Several timedelta-like and DateOffset instances that are _not_ 
+    compatible with Monthly or Annual frequencies. 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s4"># ------------------------------------------------------------------</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=[pd.Index</span><span class="s0">, </span><span class="s1">pd.Series</span><span class="s0">, </span><span class="s1">tm.to_array</span><span class="s0">, </span><span class="s1">np.array</span><span class="s0">, </span><span class="s1">list]</span><span class="s0">, </span><span class="s1">ids=</span><span class="s0">lambda </span><span class="s1">x: x.__name__</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">box_1d_array(request):</span>
+    <span class="s5">&quot;&quot;&quot; 
+    Fixture to test behavior for Index, Series, tm.to_array, numpy Array and list 
+    classes 
+    &quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+</pre>
+</body>
+</html>

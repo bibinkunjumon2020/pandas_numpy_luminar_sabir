@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Program2.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #cc7832;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program2.py</font>
+</center></td></tr></table>
+<pre><span class="s0">#Dict to data frame</span>
+<span class="s2">import </span><span class="s1">pandas </span><span class="s2">as </span><span class="s1">pd</span>
+<span class="s1">myDict={</span><span class="s3">'emp1'</span><span class="s1">:[</span><span class="s4">12</span><span class="s2">,</span><span class="s3">'bibin'</span><span class="s2">,</span><span class="s3">'kunju'</span><span class="s2">,</span><span class="s4">32</span><span class="s2">,</span><span class="s3">'Engineer'</span><span class="s2">,</span><span class="s4">700000</span><span class="s1">]</span><span class="s2">,</span>
+        <span class="s3">'emp2'</span><span class="s1">:[</span><span class="s4">2893</span><span class="s2">,</span><span class="s3">'linu'</span><span class="s2">,</span><span class="s3">'raju'</span><span class="s2">,</span><span class="s4">43</span><span class="s2">,</span><span class="s3">'Manager'</span><span class="s2">,</span><span class="s4">89763</span><span class="s1">]</span><span class="s2">,</span>
+        <span class="s3">'emp3'</span><span class="s1">:[</span><span class="s4">123</span><span class="s2">,</span><span class="s3">'denzel'</span><span class="s2">,</span><span class="s3">'bibin'</span><span class="s2">,</span><span class="s4">2</span><span class="s2">,</span><span class="s3">'child'</span><span class="s2">,</span><span class="s4">5656565</span><span class="s1">]</span><span class="s2">,</span>
+        <span class="s3">'emp4'</span><span class="s1">:[</span><span class="s4">345</span><span class="s2">,</span><span class="s3">'hyson'</span><span class="s2">,</span><span class="s3">'MS'</span><span class="s2">,</span><span class="s4">34</span><span class="s2">,</span><span class="s3">'Tester'</span><span class="s2">,</span><span class="s4">6767262</span><span class="s1">]</span><span class="s2">,</span>
+        <span class="s1">}</span>
+<span class="s0">#print(myDict)</span>
+<span class="s1">data=pd.DataFrame(myDict)</span>
+<span class="s0">#print(data)</span>
+<span class="s1">data[</span><span class="s3">'location'</span><span class="s1">]=[</span><span class="s3">'Kollam'</span><span class="s2">,</span><span class="s3">'TVM'</span><span class="s2">,</span><span class="s3">'Koz'</span><span class="s2">,</span><span class="s3">'Kazar'</span><span class="s2">,</span><span class="s3">'kan'</span><span class="s2">,</span><span class="s3">'alepy'</span><span class="s1">]</span>
+<span class="s1">print(data)</span>
+<span class="s1">print(</span><span class="s3">&quot;*******&quot;</span><span class="s1">)</span>
+<span class="s1">print(data.iloc[</span><span class="s4">0</span><span class="s1">] [[</span><span class="s3">'emp1'</span><span class="s2">,</span><span class="s3">'emp4'</span><span class="s1">]])</span>
+<span class="s1">print(data.iloc[</span><span class="s4">2</span><span class="s1">] [[</span><span class="s3">'emp1'</span><span class="s2">,</span><span class="s3">'emp2'</span><span class="s1">]])</span></pre>
+</body>
+</html>

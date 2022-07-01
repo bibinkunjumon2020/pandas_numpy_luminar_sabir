@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Program5.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program5.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">pandas </span><span class="s0">as </span><span class="s1">pd</span>
+<span class="s2">#dfname=pd.read_csv(&quot;path&quot;)</span>
+<span class="s1">data=pd.read_csv(</span><span class="s3">&quot;/Users/bibinkunjumon/Documents/customer.txt&quot;</span><span class="s0">,</span><span class="s1">header=</span><span class="s0">None</span><span class="s1">)</span>
+<span class="s1">print(data)</span>
+<span class="s2">#data=pd.read_csv(&quot;/Users/bibinkunjumon/Documents/customer.txt&quot;,header=[['id','fname','lname','age','prof','loc']]) -&gt; Its not Possible</span>
+
+<span class="s1">data.columns=[</span><span class="s3">'id'</span><span class="s0">,</span><span class="s3">'fname'</span><span class="s0">,</span><span class="s3">'lname'</span><span class="s0">,</span><span class="s3">'age'</span><span class="s0">,</span><span class="s3">'prof'</span><span class="s0">,</span><span class="s3">'loc'</span><span class="s1">]</span>
+<span class="s1">print(data)</span>
+
+<span class="s1">data_1=data.rename(columns={</span><span class="s3">'lname'</span><span class="s1">:</span><span class="s3">'last_Name'</span><span class="s1">})  </span><span class="s2">#Changing the column title</span>
+<span class="s1">print(data_1)</span></pre>
+</body>
+</html>

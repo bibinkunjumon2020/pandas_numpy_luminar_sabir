@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Program23_linspace.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #cc7832;}
+.s3 { color: #6897bb;}
+.s4 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program23_linspace.py</font>
+</center></td></tr></table>
+<pre><span class="s0">#linspace (arg1-starting number/arg2-ending number/arg3-How many equal division - decimal also get as o/p</span>
+<span class="s0">#default is float. I can covert to int using dtype</span>
+<span class="s2">import </span><span class="s1">numpy</span>
+<span class="s1">my_array=numpy.linspace(</span><span class="s3">1</span><span class="s2">,</span><span class="s3">100</span><span class="s2">,</span><span class="s3">10</span><span class="s1">)</span>
+<span class="s1">print(my_array)</span>
+
+<span class="s1">my_array1=numpy.linspace(</span><span class="s3">1</span><span class="s2">,</span><span class="s3">100</span><span class="s2">,</span><span class="s3">11</span><span class="s1">)</span>
+<span class="s1">print(my_array1)</span>
+
+<span class="s1">my_array2=numpy.linspace(</span><span class="s3">1</span><span class="s2">,</span><span class="s3">100</span><span class="s2">,</span><span class="s3">13</span><span class="s1">)</span>
+<span class="s1">print(my_array2)</span>
+<span class="s1">print(my_array2.size)</span>
+
+<span class="s1">my_array3=numpy.linspace(</span><span class="s3">1</span><span class="s2">,</span><span class="s3">100</span><span class="s2">,</span><span class="s3">13</span><span class="s2">,</span><span class="s1">dtype=int)</span>
+<span class="s1">print(my_array3)</span>
+<span class="s1">print(</span><span class="s4">&quot;*&quot;</span><span class="s1">*</span><span class="s3">100</span><span class="s1">)</span>
+<span class="s0">#if no arg3 then default is 50</span>
+<span class="s1">my_array4=numpy.linspace(</span><span class="s3">1</span><span class="s2">,</span><span class="s3">20</span><span class="s1">)</span>
+<span class="s1">print(my_array4.size)</span></pre>
+</body>
+</html>

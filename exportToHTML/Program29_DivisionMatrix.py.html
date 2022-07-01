@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Program29_DivisionMatrix.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #6a8759;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program29_DivisionMatrix.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+<span class="s1">matrix1=np.reshape(np.arange(</span><span class="s2">10</span><span class="s0">,</span><span class="s2">19</span><span class="s1">)</span><span class="s0">,</span><span class="s1">[</span><span class="s2">3</span><span class="s0">,</span><span class="s2">3</span><span class="s1">])</span>
+<span class="s1">matrix2=np.reshape(np.arange(</span><span class="s2">20</span><span class="s0">,</span><span class="s2">29</span><span class="s1">)</span><span class="s0">,</span><span class="s1">[</span><span class="s2">3</span><span class="s0">,</span><span class="s2">3</span><span class="s1">])</span>
+<span class="s1">matrix3=np.reshape(np.arange(</span><span class="s2">80</span><span class="s0">,</span><span class="s2">89</span><span class="s1">)</span><span class="s0">,</span><span class="s1">[</span><span class="s2">3</span><span class="s0">,</span><span class="s2">3</span><span class="s1">])</span>
+<span class="s1">print(matrix1</span><span class="s0">,</span><span class="s3">&quot;</span><span class="s0">\n </span><span class="s3">&quot;</span><span class="s0">,</span><span class="s3">&quot;******</span><span class="s0">\n</span><span class="s3">&quot;</span><span class="s0">,</span><span class="s1">matrix2</span><span class="s0">,</span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">*******</span><span class="s0">\n</span><span class="s3">&quot;</span><span class="s0">,</span><span class="s1">matrix3)</span>
+
+<span class="s4"># Division 2 matrix</span>
+<span class="s1">print(</span><span class="s3">&quot;Result = &quot;</span><span class="s0">,</span><span class="s1">np.divide(matrix1</span><span class="s0">,</span><span class="s1">matrix2))</span>
+
+<span class="s4"># Division 1 matrix by a specific number</span>
+<span class="s1">print(np.divide(matrix1</span><span class="s0">,</span><span class="s2">2</span><span class="s1">))</span>
+
+<span class="s4"># True Division of 2 matrix - It gives clear value that is float.</span>
+<span class="s1">print(np.true_divide(matrix2</span><span class="s0">,</span><span class="s1">matrix1))</span>
+<span class="s4"># True Division 1 matrix by a specific number- It gives clear value that is float.</span>
+<span class="s1">print(np.true_divide(matrix1</span><span class="s0">,</span><span class="s2">2</span><span class="s1">))</span>
+<span class="s4"># Floor Division of 2 matrix - It gives integer values..decimal part gone</span>
+<span class="s1">print(np.floor_divide(matrix2</span><span class="s0">,</span><span class="s1">matrix1))</span>
+
+<span class="s4"># Floor Division 1 matrix by a specific number-- It gives integer values..decimal part gone</span>
+<span class="s1">print(np.floor_divide(matrix2</span><span class="s0">,</span><span class="s2">4</span><span class="s1">))</span>
+</pre>
+</body>
+</html>

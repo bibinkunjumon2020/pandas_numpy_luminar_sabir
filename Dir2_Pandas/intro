@@ -1,0 +1,38 @@
+python library
+Used for - > data analysis,manipulation
+
+big data tools
+spark: RDD,Data frame
+Hadoop:pig,hive
+
+python big data tool is panda lib
+panda-single node cluster
+
+3 Varieties of Data: panda used for 1 &3
+1.Structured Data : panda
+2.Unstructured Data
+3.Semi-Structured Data :panda
+
+For unstructured data usually we wnt use panda
+
+Pig: store data in hdfs-->load
+HIve:store hdfs-->table load
+....................
+Panda Datastructure
+.....................
+3 Types:
+    1.Series
+    2.Data Frame
+    3.Panel
+
+1.Series:
+
+Used for 1D data.or one labelled data
+ex:List,Tuples,Set,Dictionary
+
+2.Data Frame
+2D data process.- Row and Column
+
+3.Panel:
+3D data process
+

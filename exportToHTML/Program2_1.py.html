@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Program2_1.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #6897bb;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program2_1.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">pandas </span><span class="s0">as </span><span class="s1">pd</span>
+<span class="s1">s1=pd.Series({</span><span class="s2">'name'</span><span class="s1">:</span><span class="s2">'bibin'</span><span class="s0">,</span><span class="s2">'age'</span><span class="s1">:</span><span class="s3">34</span><span class="s0">,</span><span class="s2">'salary'</span><span class="s1">:</span><span class="s3">34567</span><span class="s1">}) </span><span class="s4">#dict and series created in a line</span>
+<span class="s1">print(s1)</span>
+<span class="s1">dict1={</span><span class="s2">'id'</span><span class="s1">:</span><span class="s3">123</span><span class="s0">,</span><span class="s2">'age'</span><span class="s1">:</span><span class="s3">34</span><span class="s0">,</span><span class="s2">'name'</span><span class="s1">:</span><span class="s2">'denzel'</span><span class="s1">}</span>
+<span class="s1">s2=pd.Series(dict1</span><span class="s0">,</span><span class="s1">index=[</span><span class="s2">'name'</span><span class="s0">,</span><span class="s2">'age'</span><span class="s0">,</span><span class="s2">'id'</span><span class="s1">])  </span><span class="s4">#Here series created in the order of index i am giving</span>
+<span class="s1">print(s2)</span>
+<span class="s1">myDic={</span><span class="s2">'name'</span><span class="s1">:</span><span class="s2">'bibin'</span><span class="s0">,</span><span class="s2">'age'</span><span class="s1">:</span><span class="s3">30</span><span class="s0">,</span><span class="s2">'salary'</span><span class="s1">:</span><span class="s3">78675</span><span class="s1">}</span>
+<span class="s1">s3=pd.Series(myDic</span><span class="s0">,</span><span class="s1">index=[</span><span class="s2">'age'</span><span class="s1">]) </span><span class="s4">#Its not possible to give less index in list</span>
+<span class="s1">s4=pd.Series(myDic</span><span class="s0">,</span><span class="s1">index=[</span><span class="s2">'age'</span><span class="s0">,</span><span class="s2">'salary'</span><span class="s0">,</span><span class="s2">'name'</span><span class="s1">])</span>
+<span class="s1">print(s3)</span>
+<span class="s1">print(s4)</span>
+<span class="s4"># Here dic key became indexes insted of 0,1,2,3</span></pre>
+</body>
+</html>

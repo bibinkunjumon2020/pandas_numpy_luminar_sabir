@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Program40_argsort.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program40_argsort.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+
+<span class="s1">arra1=np.array([</span><span class="s2">6</span><span class="s0">,</span><span class="s2">3</span><span class="s0">,</span><span class="s2">8</span><span class="s0">,</span><span class="s2">9</span><span class="s0">,</span><span class="s2">1</span><span class="s0">,</span><span class="s2">7</span><span class="s0">,</span><span class="s2">2</span><span class="s1">])</span>
+<span class="s1">print(np.sort(arra1))</span>
+<span class="s1">print(np.argsort(arra1))</span>
+
+<span class="s1">matrix=np.array([[</span><span class="s2">1</span><span class="s0">,</span><span class="s2">2</span><span class="s0">,</span><span class="s2">3</span><span class="s1">]</span><span class="s0">,</span><span class="s1">[</span><span class="s2">4</span><span class="s0">,</span><span class="s2">2</span><span class="s0">,</span><span class="s2">6</span><span class="s1">]</span><span class="s0">,</span><span class="s1">[</span><span class="s2">6</span><span class="s0">,</span><span class="s2">7</span><span class="s0">,</span><span class="s2">9</span><span class="s1">]])</span>
+<span class="s1">print(matrix)</span>
+<span class="s1">print(np.sort(matrix</span><span class="s0">,</span><span class="s1">axis=</span><span class="s2">1</span><span class="s1">)) </span><span class="s3">#Sort elements in row wise</span>
+<span class="s1">print(np.argsort(matrix</span><span class="s0">,</span><span class="s1">axis=</span><span class="s2">1</span><span class="s1">))  </span><span class="s3">#Index of sorted elements</span></pre>
+</body>
+</html>

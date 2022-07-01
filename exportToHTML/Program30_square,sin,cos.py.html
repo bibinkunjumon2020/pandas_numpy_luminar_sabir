@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>Program30_square,sin,cos.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+.s4 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program30_square,sin,cos.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+
+<span class="s1">matrix1=np.arange(</span><span class="s2">0</span><span class="s0">,</span><span class="s2">9</span><span class="s1">).reshape((</span><span class="s2">3</span><span class="s0">,</span><span class="s2">3</span><span class="s1">))</span>
+<span class="s1">print(matrix1)</span>
+
+<span class="s3">#Square of each element in matrix</span>
+
+<span class="s1">matrix2=np.square(matrix1)</span>
+<span class="s1">print(</span><span class="s4">&quot;Square = </span><span class="s0">\n</span><span class="s4">&quot;</span><span class="s0">,</span><span class="s1">matrix2)</span>
+<span class="s3">#Square Root of each element in matrix</span>
+<span class="s1">print(</span><span class="s4">&quot;Square Root = </span><span class="s0">\n</span><span class="s4">&quot;</span><span class="s0">,</span><span class="s1">np.sqrt(matrix1))</span>
+
+<span class="s4">&quot;&quot;&quot; 
+sin cos tan exp log 
+ 
+&quot;&quot;&quot;</span>
+
+<span class="s1">print(</span><span class="s4">&quot;Sin :&quot;</span><span class="s0">,</span><span class="s1">np.sin(</span><span class="s2">0</span><span class="s1">))</span>
+<span class="s1">print(</span><span class="s4">&quot;Cos :&quot;</span><span class="s0">,</span><span class="s1">np.cos(</span><span class="s2">0</span><span class="s1">))</span>
+<span class="s1">print(</span><span class="s4">&quot;Tan :&quot;</span><span class="s0">,</span><span class="s1">np.tan(</span><span class="s2">0</span><span class="s1">))</span>
+<span class="s1">print(</span><span class="s4">&quot;Log = &quot;</span><span class="s0">,</span><span class="s1">np.log(</span><span class="s2">1</span><span class="s1">))</span></pre>
+</body>
+</html>

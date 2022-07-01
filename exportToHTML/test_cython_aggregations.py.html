@@ -1,0 +1,133 @@
+<html>
+<head>
+<title>test_cython_aggregations.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+.s5 { color: #629755; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+test_cython_aggregations.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">functools </span><span class="s0">import </span><span class="s1">partial</span>
+<span class="s0">import </span><span class="s1">sys</span>
+
+<span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+<span class="s0">import </span><span class="s1">pytest</span>
+
+<span class="s0">import </span><span class="s1">pandas._libs.window.aggregations </span><span class="s0">as </span><span class="s1">window_aggregations</span>
+
+<span class="s0">from </span><span class="s1">pandas </span><span class="s0">import </span><span class="s1">Series</span>
+<span class="s0">import </span><span class="s1">pandas._testing </span><span class="s0">as </span><span class="s1">tm</span>
+
+
+<span class="s0">def </span><span class="s1">_get_rolling_aggregations():</span>
+    <span class="s2"># list pairs of name and function</span>
+    <span class="s2"># each function has this signature:</span>
+    <span class="s2"># (const float64_t[:] values, ndarray[int64_t] start,</span>
+    <span class="s2">#  ndarray[int64_t] end, int64_t minp) -&gt; np.ndarray</span>
+    <span class="s1">named_roll_aggs = (</span>
+        <span class="s1">[</span>
+            <span class="s1">(</span><span class="s3">&quot;roll_sum&quot;</span><span class="s0">, </span><span class="s1">window_aggregations.roll_sum)</span><span class="s0">,</span>
+            <span class="s1">(</span><span class="s3">&quot;roll_mean&quot;</span><span class="s0">, </span><span class="s1">window_aggregations.roll_mean)</span><span class="s0">,</span>
+        <span class="s1">]</span>
+        <span class="s1">+ [</span>
+            <span class="s1">(</span><span class="s3">f&quot;roll_var(</span><span class="s0">{</span><span class="s1">ddof</span><span class="s0">}</span><span class="s3">)&quot;</span><span class="s0">, </span><span class="s1">partial(window_aggregations.roll_var</span><span class="s0">, </span><span class="s1">ddof=ddof))</span>
+            <span class="s0">for </span><span class="s1">ddof </span><span class="s0">in </span><span class="s1">[</span><span class="s4">0</span><span class="s0">, </span><span class="s4">1</span><span class="s1">]</span>
+        <span class="s1">]</span>
+        <span class="s1">+ [</span>
+            <span class="s1">(</span><span class="s3">&quot;roll_skew&quot;</span><span class="s0">, </span><span class="s1">window_aggregations.roll_skew)</span><span class="s0">,</span>
+            <span class="s1">(</span><span class="s3">&quot;roll_kurt&quot;</span><span class="s0">, </span><span class="s1">window_aggregations.roll_kurt)</span><span class="s0">,</span>
+            <span class="s1">(</span><span class="s3">&quot;roll_median_c&quot;</span><span class="s0">, </span><span class="s1">window_aggregations.roll_median_c)</span><span class="s0">,</span>
+            <span class="s1">(</span><span class="s3">&quot;roll_max&quot;</span><span class="s0">, </span><span class="s1">window_aggregations.roll_max)</span><span class="s0">,</span>
+            <span class="s1">(</span><span class="s3">&quot;roll_min&quot;</span><span class="s0">, </span><span class="s1">window_aggregations.roll_min)</span><span class="s0">,</span>
+        <span class="s1">]</span>
+        <span class="s1">+ [</span>
+            <span class="s1">(</span>
+                <span class="s3">f&quot;roll_quantile(</span><span class="s0">{</span><span class="s1">quantile</span><span class="s0">}</span><span class="s3">,</span><span class="s0">{</span><span class="s1">interpolation</span><span class="s0">}</span><span class="s3">)&quot;</span><span class="s0">,</span>
+                <span class="s1">partial(</span>
+                    <span class="s1">window_aggregations.roll_quantile</span><span class="s0">,</span>
+                    <span class="s1">quantile=quantile</span><span class="s0">,</span>
+                    <span class="s1">interpolation=interpolation</span><span class="s0">,</span>
+                <span class="s1">)</span><span class="s0">,</span>
+            <span class="s1">)</span>
+            <span class="s0">for </span><span class="s1">quantile </span><span class="s0">in </span><span class="s1">[</span><span class="s4">0.0001</span><span class="s0">, </span><span class="s4">0.5</span><span class="s0">, </span><span class="s4">0.9999</span><span class="s1">]</span>
+            <span class="s0">for </span><span class="s1">interpolation </span><span class="s0">in </span><span class="s1">window_aggregations.interpolation_types</span>
+        <span class="s1">]</span>
+        <span class="s1">+ [</span>
+            <span class="s1">(</span>
+                <span class="s3">f&quot;roll_rank(</span><span class="s0">{</span><span class="s1">percentile</span><span class="s0">}</span><span class="s3">,</span><span class="s0">{</span><span class="s1">method</span><span class="s0">}</span><span class="s3">,</span><span class="s0">{</span><span class="s1">ascending</span><span class="s0">}</span><span class="s3">)&quot;</span><span class="s0">,</span>
+                <span class="s1">partial(</span>
+                    <span class="s1">window_aggregations.roll_rank</span><span class="s0">,</span>
+                    <span class="s1">percentile=percentile</span><span class="s0">,</span>
+                    <span class="s1">method=method</span><span class="s0">,</span>
+                    <span class="s1">ascending=ascending</span><span class="s0">,</span>
+                <span class="s1">)</span><span class="s0">,</span>
+            <span class="s1">)</span>
+            <span class="s0">for </span><span class="s1">percentile </span><span class="s0">in </span><span class="s1">[</span><span class="s0">True, False</span><span class="s1">]</span>
+            <span class="s0">for </span><span class="s1">method </span><span class="s0">in </span><span class="s1">window_aggregations.rolling_rank_tiebreakers.keys()</span>
+            <span class="s0">for </span><span class="s1">ascending </span><span class="s0">in </span><span class="s1">[</span><span class="s0">True, False</span><span class="s1">]</span>
+        <span class="s1">]</span>
+    <span class="s1">)</span>
+    <span class="s2"># unzip to a list of 2 tuples, names and functions</span>
+    <span class="s1">unzipped = list(zip(*named_roll_aggs))</span>
+    <span class="s0">return </span><span class="s1">{</span><span class="s3">&quot;ids&quot;</span><span class="s1">: unzipped[</span><span class="s4">0</span><span class="s1">]</span><span class="s0">, </span><span class="s3">&quot;params&quot;</span><span class="s1">: unzipped[</span><span class="s4">1</span><span class="s1">]}</span>
+
+
+<span class="s1">_rolling_aggregations = _get_rolling_aggregations()</span>
+
+
+<span class="s1">@pytest.fixture(</span>
+    <span class="s1">params=_rolling_aggregations[</span><span class="s3">&quot;params&quot;</span><span class="s1">]</span><span class="s0">, </span><span class="s1">ids=_rolling_aggregations[</span><span class="s3">&quot;ids&quot;</span><span class="s1">]</span>
+<span class="s1">)</span>
+<span class="s0">def </span><span class="s1">rolling_aggregation(request):</span>
+    <span class="s5">&quot;&quot;&quot;Make a rolling aggregation function as fixture.&quot;&quot;&quot;</span>
+    <span class="s0">return </span><span class="s1">request.param</span>
+
+
+<span class="s0">def </span><span class="s1">test_rolling_aggregation_boundary_consistency(rolling_aggregation):</span>
+    <span class="s2"># GH-45647</span>
+    <span class="s1">minp</span><span class="s0">, </span><span class="s1">step</span><span class="s0">, </span><span class="s1">width</span><span class="s0">, </span><span class="s1">size</span><span class="s0">, </span><span class="s1">selection = </span><span class="s4">0</span><span class="s0">, </span><span class="s4">1</span><span class="s0">, </span><span class="s4">3</span><span class="s0">, </span><span class="s4">11</span><span class="s0">, </span><span class="s1">[</span><span class="s4">2</span><span class="s0">, </span><span class="s4">7</span><span class="s1">]</span>
+    <span class="s1">values = np.arange(</span><span class="s4">1</span><span class="s0">, </span><span class="s4">1 </span><span class="s1">+ size</span><span class="s0">, </span><span class="s1">dtype=np.float64)</span>
+    <span class="s1">end = np.arange(width</span><span class="s0">, </span><span class="s1">size</span><span class="s0">, </span><span class="s1">step</span><span class="s0">, </span><span class="s1">dtype=np.int64)</span>
+    <span class="s1">start = end - width</span>
+    <span class="s1">selarr = np.array(selection</span><span class="s0">, </span><span class="s1">dtype=np.int32)</span>
+    <span class="s1">result = Series(rolling_aggregation(values</span><span class="s0">, </span><span class="s1">start[selarr]</span><span class="s0">, </span><span class="s1">end[selarr]</span><span class="s0">, </span><span class="s1">minp))</span>
+    <span class="s1">expected = Series(rolling_aggregation(values</span><span class="s0">, </span><span class="s1">start</span><span class="s0">, </span><span class="s1">end</span><span class="s0">, </span><span class="s1">minp)[selarr])</span>
+    <span class="s1">tm.assert_equal(expected</span><span class="s0">, </span><span class="s1">result)</span>
+
+
+<span class="s0">def </span><span class="s1">test_rolling_aggregation_with_unused_elements(rolling_aggregation):</span>
+    <span class="s2"># GH-45647</span>
+    <span class="s1">minp</span><span class="s0">, </span><span class="s1">width = </span><span class="s4">0</span><span class="s0">, </span><span class="s4">5  </span><span class="s2"># width at least 4 for kurt</span>
+    <span class="s1">size = </span><span class="s4">2 </span><span class="s1">* width + </span><span class="s4">5</span>
+    <span class="s1">values = np.arange(</span><span class="s4">1</span><span class="s0">, </span><span class="s1">size + </span><span class="s4">1</span><span class="s0">, </span><span class="s1">dtype=np.float64)</span>
+    <span class="s1">values[width : width + </span><span class="s4">2</span><span class="s1">] = sys.float_info.min</span>
+    <span class="s1">values[width + </span><span class="s4">2</span><span class="s1">] = np.nan</span>
+    <span class="s1">values[width + </span><span class="s4">3 </span><span class="s1">: width + </span><span class="s4">5</span><span class="s1">] = sys.float_info.max</span>
+    <span class="s1">start = np.array([</span><span class="s4">0</span><span class="s0">, </span><span class="s1">size - width]</span><span class="s0">, </span><span class="s1">dtype=np.int64)</span>
+    <span class="s1">end = np.array([width</span><span class="s0">, </span><span class="s1">size]</span><span class="s0">, </span><span class="s1">dtype=np.int64)</span>
+    <span class="s1">loc = np.array(</span>
+        <span class="s1">[j </span><span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range(len(start)) </span><span class="s0">for </span><span class="s1">j </span><span class="s0">in </span><span class="s1">range(start[i]</span><span class="s0">, </span><span class="s1">end[i])]</span><span class="s0">,</span>
+        <span class="s1">dtype=np.int32</span><span class="s0">,</span>
+    <span class="s1">)</span>
+    <span class="s1">result = Series(rolling_aggregation(values</span><span class="s0">, </span><span class="s1">start</span><span class="s0">, </span><span class="s1">end</span><span class="s0">, </span><span class="s1">minp))</span>
+    <span class="s1">compact_values = np.array(values[loc]</span><span class="s0">, </span><span class="s1">dtype=np.float64)</span>
+    <span class="s1">compact_start = np.arange(</span><span class="s4">0</span><span class="s0">, </span><span class="s1">len(start) * width</span><span class="s0">, </span><span class="s1">width</span><span class="s0">, </span><span class="s1">dtype=np.int64)</span>
+    <span class="s1">compact_end = compact_start + width</span>
+    <span class="s1">expected = Series(</span>
+        <span class="s1">rolling_aggregation(compact_values</span><span class="s0">, </span><span class="s1">compact_start</span><span class="s0">, </span><span class="s1">compact_end</span><span class="s0">, </span><span class="s1">minp)</span>
+    <span class="s1">)</span>
+    <span class="s0">assert </span><span class="s1">np.isfinite(expected.values).all()</span><span class="s0">, </span><span class="s3">&quot;Not all expected values are finite&quot;</span>
+    <span class="s1">tm.assert_equal(expected</span><span class="s0">, </span><span class="s1">result)</span>
+</pre>
+</body>
+</html>

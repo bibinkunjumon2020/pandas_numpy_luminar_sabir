@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Program4.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #cc7832;}
+.s3 { color: #6897bb;}
+.s4 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program4.py</font>
+</center></td></tr></table>
+<pre><span class="s0">#Nested list -&gt;Data frame</span>
+<span class="s2">import </span><span class="s1">pandas </span><span class="s2">as </span><span class="s1">pd</span>
+<span class="s1">mylist=[[</span><span class="s3">12</span><span class="s2">,</span><span class="s4">'bibin'</span><span class="s2">,</span><span class="s4">'kunju'</span><span class="s2">,</span><span class="s3">32</span><span class="s2">,</span><span class="s4">'Engineer'</span><span class="s2">,</span><span class="s3">700000</span><span class="s1">]</span><span class="s2">,</span>
+        <span class="s1">[</span><span class="s3">2893</span><span class="s2">,</span><span class="s4">'linu'</span><span class="s2">,</span><span class="s4">'raju'</span><span class="s2">,</span><span class="s3">43</span><span class="s2">,</span><span class="s4">'Manager'</span><span class="s2">,</span><span class="s3">89763</span><span class="s1">]</span><span class="s2">,</span>
+        <span class="s1">[</span><span class="s3">123</span><span class="s2">,</span><span class="s4">'denzel'</span><span class="s2">,</span><span class="s4">'bibin'</span><span class="s2">,</span><span class="s3">2</span><span class="s2">,</span><span class="s4">'child'</span><span class="s2">,</span><span class="s3">5656565</span><span class="s1">]</span><span class="s2">,</span>
+        <span class="s1">[</span><span class="s3">345</span><span class="s2">,</span><span class="s4">'hyson'</span><span class="s2">,</span><span class="s4">'MS'</span><span class="s2">,</span><span class="s3">34</span><span class="s2">,</span><span class="s4">'Tester'</span><span class="s2">,</span><span class="s3">6767262</span><span class="s1">]</span><span class="s2">,</span>
+        <span class="s1">[</span><span class="s3">456</span><span class="s2">,</span><span class="s4">'prince'</span><span class="s2">,</span><span class="s4">'thayoli'</span><span class="s2">,</span><span class="s3">34</span><span class="s2">,</span><span class="s4">'Myru'</span><span class="s2">,</span><span class="s3">909090</span><span class="s1">]]</span>
+<span class="s1">data=pd.DataFrame(mylist</span><span class="s2">,</span><span class="s1">columns=[</span><span class="s4">&quot;id&quot;</span><span class="s2">,</span><span class="s4">'fname'</span><span class="s2">,</span><span class="s4">'lname'</span><span class="s2">,</span><span class="s4">'age'</span><span class="s2">,</span><span class="s4">'Profession'</span><span class="s2">,</span><span class="s4">'Salary'</span><span class="s1">])</span>
+<span class="s1">print(data.columns)</span>
+<span class="s1">data[</span><span class="s4">'gender'</span><span class="s1">]=[</span><span class="s4">'M'</span><span class="s2">,</span><span class="s4">'M'</span><span class="s2">,</span><span class="s4">'F'</span><span class="s2">,</span><span class="s4">'M'</span><span class="s2">,</span><span class="s4">'F'</span><span class="s1">]  </span><span class="s0">#Field for each row must be given</span>
+<span class="s1">print(data)</span></pre>
+</body>
+</html>

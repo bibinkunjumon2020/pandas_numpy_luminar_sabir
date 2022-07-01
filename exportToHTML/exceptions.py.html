@@ -1,0 +1,162 @@
+<html>
+<head>
+<title>exceptions.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #629755; font-style: italic;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #cc7832;}
+.s3 { color: #6a8759;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+exceptions.py</font>
+</center></td></tr></table>
+<pre><span class="s0">&quot;&quot;&quot; 
+requests.exceptions 
+~~~~~~~~~~~~~~~~~~~ 
+ 
+This module contains the set of Requests' exceptions. 
+&quot;&quot;&quot;</span>
+<span class="s2">from </span><span class="s1">urllib3.exceptions </span><span class="s2">import </span><span class="s1">HTTPError </span><span class="s2">as </span><span class="s1">BaseHTTPError</span>
+
+<span class="s2">from </span><span class="s1">.compat </span><span class="s2">import </span><span class="s1">JSONDecodeError </span><span class="s2">as </span><span class="s1">CompatJSONDecodeError</span>
+
+
+<span class="s2">class </span><span class="s1">RequestException(IOError):</span>
+    <span class="s0">&quot;&quot;&quot;There was an ambiguous exception that occurred while handling your 
+    request. 
+    &quot;&quot;&quot;</span>
+
+    <span class="s2">def </span><span class="s1">__init__(self</span><span class="s2">, </span><span class="s1">*args</span><span class="s2">, </span><span class="s1">**kwargs):</span>
+        <span class="s0">&quot;&quot;&quot;Initialize RequestException with `request` and `response` objects.&quot;&quot;&quot;</span>
+        <span class="s1">response = kwargs.pop(</span><span class="s3">&quot;response&quot;</span><span class="s2">, None</span><span class="s1">)</span>
+        <span class="s1">self.response = response</span>
+        <span class="s1">self.request = kwargs.pop(</span><span class="s3">&quot;request&quot;</span><span class="s2">, None</span><span class="s1">)</span>
+        <span class="s2">if </span><span class="s1">response </span><span class="s2">is not None and not </span><span class="s1">self.request </span><span class="s2">and </span><span class="s1">hasattr(response</span><span class="s2">, </span><span class="s3">&quot;request&quot;</span><span class="s1">):</span>
+            <span class="s1">self.request = self.response.request</span>
+        <span class="s1">super().__init__(*args</span><span class="s2">, </span><span class="s1">**kwargs)</span>
+
+
+<span class="s2">class </span><span class="s1">InvalidJSONError(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;A JSON error occurred.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">JSONDecodeError(InvalidJSONError</span><span class="s2">, </span><span class="s1">CompatJSONDecodeError):</span>
+    <span class="s0">&quot;&quot;&quot;Couldn't decode the text into json&quot;&quot;&quot;</span>
+
+    <span class="s2">def </span><span class="s1">__init__(self</span><span class="s2">, </span><span class="s1">*args</span><span class="s2">, </span><span class="s1">**kwargs):</span>
+        <span class="s0">&quot;&quot;&quot; 
+        Construct the JSONDecodeError instance first with all 
+        args. Then use it's args to construct the IOError so that 
+        the json specific args aren't used as IOError specific args 
+        and the error message from JSONDecodeError is preserved. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">CompatJSONDecodeError.__init__(self</span><span class="s2">, </span><span class="s1">*args)</span>
+        <span class="s1">InvalidJSONError.__init__(self</span><span class="s2">, </span><span class="s1">*self.args</span><span class="s2">, </span><span class="s1">**kwargs)</span>
+
+
+<span class="s2">class </span><span class="s1">HTTPError(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;An HTTP error occurred.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">ConnectionError(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;A Connection error occurred.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">ProxyError(ConnectionError):</span>
+    <span class="s0">&quot;&quot;&quot;A proxy error occurred.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">SSLError(ConnectionError):</span>
+    <span class="s0">&quot;&quot;&quot;An SSL error occurred.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">Timeout(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;The request timed out. 
+ 
+    Catching this error will catch both 
+    :exc:`~requests.exceptions.ConnectTimeout` and 
+    :exc:`~requests.exceptions.ReadTimeout` errors. 
+    &quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">ConnectTimeout(ConnectionError</span><span class="s2">, </span><span class="s1">Timeout):</span>
+    <span class="s0">&quot;&quot;&quot;The request timed out while trying to connect to the remote server. 
+ 
+    Requests that produced this error are safe to retry. 
+    &quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">ReadTimeout(Timeout):</span>
+    <span class="s0">&quot;&quot;&quot;The server did not send any data in the allotted amount of time.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">URLRequired(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;A valid URL is required to make a request.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">TooManyRedirects(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;Too many redirects.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">MissingSchema(RequestException</span><span class="s2">, </span><span class="s1">ValueError):</span>
+    <span class="s0">&quot;&quot;&quot;The URL scheme (e.g. http or https) is missing.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">InvalidSchema(RequestException</span><span class="s2">, </span><span class="s1">ValueError):</span>
+    <span class="s0">&quot;&quot;&quot;The URL scheme provided is either invalid or unsupported.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">InvalidURL(RequestException</span><span class="s2">, </span><span class="s1">ValueError):</span>
+    <span class="s0">&quot;&quot;&quot;The URL provided was somehow invalid.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">InvalidHeader(RequestException</span><span class="s2">, </span><span class="s1">ValueError):</span>
+    <span class="s0">&quot;&quot;&quot;The header value provided was somehow invalid.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">InvalidProxyURL(InvalidURL):</span>
+    <span class="s0">&quot;&quot;&quot;The proxy URL provided is invalid.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">ChunkedEncodingError(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;The server declared chunked encoding but sent an invalid chunk.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">ContentDecodingError(RequestException</span><span class="s2">, </span><span class="s1">BaseHTTPError):</span>
+    <span class="s0">&quot;&quot;&quot;Failed to decode response content.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">StreamConsumedError(RequestException</span><span class="s2">, </span><span class="s1">TypeError):</span>
+    <span class="s0">&quot;&quot;&quot;The content for this response was already consumed.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">RetryError(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;Custom retries logic failed&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">UnrewindableBodyError(RequestException):</span>
+    <span class="s0">&quot;&quot;&quot;Requests encountered an error when trying to rewind a body.&quot;&quot;&quot;</span>
+
+
+<span class="s4"># Warnings</span>
+
+
+<span class="s2">class </span><span class="s1">RequestsWarning(Warning):</span>
+    <span class="s0">&quot;&quot;&quot;Base warning for Requests.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">FileModeWarning(RequestsWarning</span><span class="s2">, </span><span class="s1">DeprecationWarning):</span>
+    <span class="s0">&quot;&quot;&quot;A file was opened in text mode, but Requests determined its binary length.&quot;&quot;&quot;</span>
+
+
+<span class="s2">class </span><span class="s1">RequestsDependencyWarning(RequestsWarning):</span>
+    <span class="s0">&quot;&quot;&quot;An imported dependency doesn't match the expected version range.&quot;&quot;&quot;</span>
+</pre>
+</body>
+</html>

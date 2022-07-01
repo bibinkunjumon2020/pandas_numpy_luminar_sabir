@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Program25_Arrray-Indexing_2D.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6897bb;}
+.s4 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Program25_Arrray-Indexing_2D.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+<span class="s2">#matrix=np.array([[1,2,3,4],[5,6,7,8],[8,3,5,7]])</span>
+<span class="s2">#print(matrix)</span>
+<span class="s2">#print(matrix.shape,matrix.ndim)</span>
+
+<span class="s2">#matrix=np.arange(4,16).reshape(3,4) # This also right</span>
+<span class="s1">matrix1=np.reshape(np.arange(</span><span class="s3">4</span><span class="s0">,</span><span class="s3">16</span><span class="s1">)</span><span class="s0">,</span><span class="s1">[</span><span class="s3">3</span><span class="s0">,</span><span class="s3">4</span><span class="s1">]) </span><span class="s2">#this is also right</span>
+<span class="s1">print(matrix1</span><span class="s0">,</span><span class="s4">&quot;</span><span class="s0">\n</span><span class="s4">&quot;</span><span class="s0">,</span><span class="s1">matrix1.size</span><span class="s0">,</span><span class="s1">matrix1.shape)</span>
+
+<span class="s1">print(matrix1[</span><span class="s3">1</span><span class="s0">,</span><span class="s3">2</span><span class="s1">]) </span><span class="s2"># print element in index [1][2] row -2 column 3</span>
+<span class="s1">print(matrix1[</span><span class="s3">0</span><span class="s0">,</span><span class="s3">0</span><span class="s1">]) </span><span class="s2">#print element of [0][0] or the first element</span>
+<span class="s1">print(matrix1[:</span><span class="s3">2</span><span class="s0">,</span><span class="s1">:</span><span class="s3">3</span><span class="s1">])</span>
+<span class="s1">print(</span><span class="s4">&quot;*&quot;</span><span class="s1">*</span><span class="s3">100</span><span class="s1">)</span>
+<span class="s1">print(matrix1[</span><span class="s3">0</span><span class="s1">:</span><span class="s3">2</span><span class="s0">,</span><span class="s3">1</span><span class="s1">:</span><span class="s3">3</span><span class="s1">]) </span><span class="s2">#row from 0 to 2 column from 1 to 3-1</span>
+<span class="s1">print(matrix1[</span><span class="s3">0</span><span class="s1">:</span><span class="s3">3</span><span class="s0">,</span><span class="s3">0</span><span class="s1">:</span><span class="s3">3</span><span class="s1">]) </span><span class="s2"># Rows &amp; column from 0 to 3-1</span>
+
+<span class="s1">print(matrix1[:</span><span class="s0">,</span><span class="s1">:</span><span class="s3">3</span><span class="s1">])</span><span class="s2">#all rows,column 0 to 3-1</span>
+<span class="s1">print(matrix1[:</span><span class="s0">,</span><span class="s3">0</span><span class="s1">])</span><span class="s2">#entire 1st column</span>
+<span class="s1">print(matrix1[</span><span class="s3">0</span><span class="s0">,</span><span class="s1">:])</span><span class="s2">#Entire 1st row</span>
+
+<span class="s1">print(matrix1[-</span><span class="s3">1</span><span class="s0">,</span><span class="s1">-</span><span class="s3">3</span><span class="s1">]) </span><span class="s2"># negative index</span>
+</pre>
+</body>
+</html>
